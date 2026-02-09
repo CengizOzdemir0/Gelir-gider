@@ -22,7 +22,7 @@ pipeline {
                     sh '''
                         docker run -d \
                           --name gelir_gider_backend \
-                          --network gelir-gider_default \
+                          --network gelir-gider_gelir_gider_network \
                           -p 1818:1818 \
                           -e SPRING_DATASOURCE_URL=jdbc:postgresql://gelir_gider_postgres:5432/gelir_gider_db \
                           -e SPRING_DATASOURCE_USERNAME=gelir_user \
