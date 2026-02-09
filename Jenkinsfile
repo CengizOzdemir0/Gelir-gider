@@ -13,7 +13,7 @@ pipeline {
         stage('Build & Deploy') {
             steps {
                 // sudo kaldırıldı ve 'docker compose' (tire olmadan) deniyoruz
-                sh 'docker compose up --build -d gelir-gider-app'
+                sh 'docker compose up -d --build gelir-gider-app'
             }
         }
 
