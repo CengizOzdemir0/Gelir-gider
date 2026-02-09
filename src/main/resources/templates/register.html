@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol - Gelir Gider Takip</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>💰 Gelir - Gider Takip</h1>
+                <p>Hesap oluşturun ve finansal yönetiminizi başlatın</p>
+            </div>
+
+            <form id="registerForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">Kullanıcı Adı</label>
+                    <input type="text" id="username" name="username" required placeholder="Kullanıcı adınızı girin"
+                        minlength="3" maxlength="50">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-posta</label>
+                    <input type="email" id="email" name="email" required placeholder="E-posta adresinizi girin">
+                </div>
+
+                <div class="form-group">
+                    <label for="fullName">Ad Soyad</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Ad ve soyadınızı girin"
+                        maxlength="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Şifre</label>
+                    <input type="password" id="password" name="password" required
+                        placeholder="Şifrenizi girin (en az 6 karakter)" minlength="6">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Şifre Tekrar</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required
+                        placeholder="Şifrenizi tekrar girin" minlength="6">
+                </div>
+
+                <div id="errorMessage" class="error-message" style="display: none;"></div>
+                <div id="successMessage" class="success-message" style="display: none;"></div>
+
+                <button type="submit" class="btn-login">Kayıt Ol</button>
+            </form>
+
+            <div class="login-footer">
+                <p>Zaten hesabınız var mı? <a href="/login">Giriş Yap</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/register.js}"></script>
+</body>
+
+</html>

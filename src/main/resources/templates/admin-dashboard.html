@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Paneli - Gelir Gider Takip</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <div class="container">
+        <h1>Yönetici Paneli</h1>
+
+        <!-- Kullanıcı Yönetimi -->
+        <div class="section">
+            <div class="section-header">
+                <h2>Kullanıcı Yönetimi</h2>
+                <button class="btn-add" onclick="showUserModal()">+ Yeni Kullanıcı</button>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Kullanıcı Adı</th>
+                        <th>E-posta</th>
+                        <th>Ad Soyad</th>
+                        <th>Roller</th>
+                        <th>Durum</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <tr>
+                        <td colspan="6" class="no-data">Yükleniyor...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Kategori Yönetimi -->
+        <div class="section">
+            <div class="section-header">
+                <h2>Kategori Yönetimi</h2>
+                <button class="btn-add" onclick="showCategoryModal()">+ Yeni Kategori</button>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Kategori Adı</th>
+                        <th>Tip</th>
+                        <th>Açıklama</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody id="categoryTableBody">
+                    <tr>
+                        <td colspan="4" class="no-data">Yükleniyor...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Kullanıcı Modal -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeUserModal()">&times;</span>
+            <h2>Yeni Kullanıcı Ekle</h2>
+            <form id="userForm">
+                <div class="form-group">
+                    <label>Kullanıcı Adı</label>
+                    <input type="text" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label>E-posta</label>
+                    <input type="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Ad Soyad</label>
+                    <input type="text" name="fullName">
+                </div>
+                <div class="form-group">
+                    <label>Şifre</label>
+                    <input type="password" name="password" required>
+                </div>
+                <button type="submit" class="btn-primary">Kaydet</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Kategori Modal -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCategoryModal()">&times;</span>
+            <h2>Yeni Kategori Ekle</h2>
+            <form id="categoryForm">
+                <div class="form-group">
+                    <label>Kategori Adı</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Tip</label>
+                    <select name="type" required>
+                        <option value="INCOME">Gelir</option>
+                        <option value="EXPENSE">Gider</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Açıklama</label>
+                    <textarea name="description" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Kaydet</button>
+            </form>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script th:src="@{/js/admin.js}"></script>
+</body>
+
+</html>
