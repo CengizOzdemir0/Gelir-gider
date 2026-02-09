@@ -8,8 +8,20 @@ RUN mvn clean package -DskipTests
 # Run stage
 FROM eclipse-temurin:21-jre
 WORKDIR /app
+
+# Download and install Glowroot APM
+ADD https://github.com/glowroot/glowroot/releases/download/v0.14.3/glowroot-0.14.3-dist.zip /tmp/glowroot.zip
+RUN apt-get update && apt-get install -y unzip && \
+    unzip /tmp/glowroot.zip -d /app && \
+    rm /tmp/glowroot.zip && \
+    apt-get remove -y unzip && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 1818
+EXPOSE 4000
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Run with Glowroot agent for APM monitoring
+ENTRYPOINT ["java", "-javaagent:/app/glowroot/glowroot.jar", "-jar", "app.jar"]

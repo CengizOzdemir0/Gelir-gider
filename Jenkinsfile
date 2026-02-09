@@ -24,6 +24,8 @@ pipeline {
                           --name gelir_gider_backend \
                           --network gelir-gider_gelir_gider_network \
                           -p 1818:1818 \
+                          -p 4000:4000 \
+                          -v glowroot_data:/app/glowroot/data \
                           -e SPRING_DATASOURCE_URL=jdbc:postgresql://gelir_gider_postgres:5432/gelir_gider_db \
                           -e SPRING_DATASOURCE_USERNAME=gelir_user \
                           -e SPRING_DATASOURCE_PASSWORD=gelir_sifre_123 \
