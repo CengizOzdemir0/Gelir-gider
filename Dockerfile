@@ -10,7 +10,7 @@ FROM eclipse-temurin:21-jre
 WORKDIR /app
 
 # Download and install Glowroot APM
-ADD https://github.com/glowroot/glowroot/releases/download/v0.14.3/glowroot-0.14.3-dist.zip /tmp/glowroot.zip
+ADD https://github.com/glowroot/glowroot/releases/download/v0.14.4/glowroot-0.14.4-dist.zip /tmp/glowroot.zip
 RUN apt-get update && apt-get install -y unzip && \
     unzip /tmp/glowroot.zip -d /app && \
     rm /tmp/glowroot.zip && \
