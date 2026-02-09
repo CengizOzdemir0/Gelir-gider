@@ -105,7 +105,12 @@ function updateIncomeTable(incomes) {
             <td>${income.categoryName || '-'}</td>
             <td>${income.description || '-'}</td>
             <td>₺${income.amount.toFixed(2)}</td>
-            <td><button class="btn-delete" onclick="deleteIncome(${income.id})">Sil</button></td>
+            <td>
+                <div class="action-buttons">
+                    <button class="btn-edit" onclick="editIncome(${income.id}, ${income.amount}, ${income.categoryId || 'null'}, '${(income.description || '').replace(/'/g, "\\'")}',' ${income.transactionDate}')">Düzenle</button>
+                    <button class="btn-delete" onclick="deleteIncome(${income.id})">Sil</button>
+                </div>
+            </td>
         </tr>
     `).join('');
 }
@@ -123,28 +128,73 @@ function updateExpenseTable(expenses) {
             <td>${expense.categoryName || '-'}</td>
             <td>${expense.description || '-'}</td>
             <td>₺${expense.amount.toFixed(2)}</td>
-            <td><button class="btn-delete" onclick="deleteExpense(${expense.id})">Sil</button></td>
+            <td>
+                <div class="action-buttons">
+                    <button class="btn-edit" onclick="editExpense(${expense.id}, ${expense.amount}, ${expense.categoryId || 'null'}, '${(expense.description || '').replace(/'/g, "\\'")}',' ${expense.transactionDate}')">Düzenle</button>
+                    <button class="btn-delete" onclick="deleteExpense(${expense.id})">Sil</button>
+                </div>
+            </td>
         </tr>
     `).join('');
 }
 
 // Modal functions
+let editingIncomeId = null;
+let editingExpenseId = null;
+
 function showIncomeModal() {
+    editingIncomeId = null;
+    document.getElementById('incomeModalTitle').textContent = 'Yeni Gelir Ekle';
+    document.getElementById('incomeSubmitBtn').textContent = 'Kaydet';
     document.getElementById('incomeModal').style.display = 'block';
 }
 
 function closeIncomeModal() {
+    editingIncomeId = null;
     document.getElementById('incomeModal').style.display = 'none';
     document.getElementById('incomeForm').reset();
 }
 
 function showExpenseModal() {
+    editingExpenseId = null;
+    document.getElementById('expenseModalTitle').textContent = 'Yeni Gider Ekle';
+    document.getElementById('expenseSubmitBtn').textContent = 'Kaydet';
     document.getElementById('expenseModal').style.display = 'block';
 }
 
 function closeExpenseModal() {
+    editingExpenseId = null;
     document.getElementById('expenseModal').style.display = 'none';
     document.getElementById('expenseForm').reset();
+}
+
+// Edit functions
+function editIncome(id, amount, categoryId, description, transactionDate) {
+    editingIncomeId = id;
+    document.getElementById('incomeModalTitle').textContent = 'Gelir Düzenle';
+    document.getElementById('incomeSubmitBtn').textContent = 'Güncelle';
+
+    const form = document.getElementById('incomeForm');
+    form.elements['amount'].value = amount;
+    form.elements['categoryId'].value = categoryId || '';
+    form.elements['description'].value = description;
+    form.elements['transactionDate'].value = transactionDate.trim();
+
+    document.getElementById('incomeModal').style.display = 'block';
+}
+
+function editExpense(id, amount, categoryId, description, transactionDate) {
+    editingExpenseId = id;
+    document.getElementById('expenseModalTitle').textContent = 'Gider Düzenle';
+    document.getElementById('expenseSubmitBtn').textContent = 'Güncelle';
+
+    const form = document.getElementById('expenseForm');
+    form.elements['amount'].value = amount;
+    form.elements['categoryId'].value = categoryId || '';
+    form.elements['description'].value = description;
+    form.elements['transactionDate'].value = transactionDate.trim();
+
+    document.getElementById('expenseModal').style.display = 'block';
 }
 
 // Form submissions
@@ -159,8 +209,11 @@ document.getElementById('incomeForm').addEventListener('submit', async (e) => {
     };
 
     try {
-        const response = await fetch('/api/income', {
-            method: 'POST',
+        const url = editingIncomeId ? `/api/income/${editingIncomeId}` : '/api/income';
+        const method = editingIncomeId ? 'PUT' : 'POST';
+
+        const response = await fetch(url, {
+            method,
             headers,
             body: JSON.stringify(data)
         });
@@ -169,7 +222,8 @@ document.getElementById('incomeForm').addEventListener('submit', async (e) => {
             closeIncomeModal();
             loadMonthlyData();
         } else {
-            alert('Gelir eklenirken bir hata oluştu');
+            const errorText = await response.text();
+            alert(editingIncomeId ? 'Gelir güncellenirken bir hata oluştu' : 'Gelir eklenirken bir hata oluştu');
         }
     } catch (error) {
         console.error('Hata:', error);
@@ -188,8 +242,11 @@ document.getElementById('expenseForm').addEventListener('submit', async (e) => {
     };
 
     try {
-        const response = await fetch('/api/expense', {
-            method: 'POST',
+        const url = editingExpenseId ? `/api/expense/${editingExpenseId}` : '/api/expense';
+        const method = editingExpenseId ? 'PUT' : 'POST';
+
+        const response = await fetch(url, {
+            method,
             headers,
             body: JSON.stringify(data)
         });
@@ -198,7 +255,8 @@ document.getElementById('expenseForm').addEventListener('submit', async (e) => {
             closeExpenseModal();
             loadMonthlyData();
         } else {
-            alert('Gider eklenirken bir hata oluştu');
+            const errorText = await response.text();
+            alert(editingExpenseId ? 'Gider güncellenirken bir hata oluştu' : 'Gider eklenirken bir hata oluştu');
         }
     } catch (error) {
         console.error('Hata:', error);
