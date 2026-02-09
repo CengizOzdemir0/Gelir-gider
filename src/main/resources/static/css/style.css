@@ -435,8 +435,11 @@ body {
 }
 
 /* Mobile Card View for Tables */
-.mobile-card {
+.mobile-cards-container {
     display: none;
+}
+
+.mobile-card {
     background: #f9f9f9;
     padding: 15px;
     margin-bottom: 10px;

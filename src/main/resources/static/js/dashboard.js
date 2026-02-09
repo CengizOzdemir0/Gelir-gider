@@ -94,11 +94,15 @@ async function loadMonthlyData() {
 
 function updateIncomeTable(incomes) {
     const tbody = document.getElementById('incomeTableBody');
+    const container = document.getElementById('incomeContainer');
+
     if (incomes.length === 0) {
         tbody.innerHTML = '<tr><td colspan="5" class="no-data">Veri yok</td></tr>';
+        if (container) container.innerHTML = '<p class="no-data">Veri yok</p>';
         return;
     }
 
+    // Desktop table view
     tbody.innerHTML = incomes.map(income => `
         <tr>
             <td>${income.transactionDate}</td>
@@ -113,15 +117,49 @@ function updateIncomeTable(incomes) {
             </td>
         </tr>
     `).join('');
+
+    // Mobile card view
+    if (container) {
+        container.innerHTML = incomes.map(income => `
+            <div class="mobile-card">
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label">Tarih:</span>
+                    <span class="mobile-card-value">${income.transactionDate}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label">Kategori:</span>
+                    <span class="mobile-card-value">${income.categoryName || '-'}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label">Açıklama:</span>
+                    <span class="mobile-card-value">${income.description || '-'}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label">Tutar:</span>
+                    <span class="mobile-card-value" style="color: #4caf50; font-weight: bold;">₺${income.amount.toFixed(2)}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <div class="action-buttons" style="width: 100%;">
+                        <button class="btn-edit" onclick="editIncome(${income.id}, ${income.amount}, ${income.categoryId || 'null'}, '${(income.description || '').replace(/'/g, "\\'")}',' ${income.transactionDate}')">Düzenle</button>
+                        <button class="btn-delete" onclick="deleteIncome(${income.id})">Sil</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
 }
 
 function updateExpenseTable(expenses) {
     const tbody = document.getElementById('expenseTableBody');
+    const container = document.getElementById('expenseContainer');
+
     if (expenses.length === 0) {
         tbody.innerHTML = '<tr><td colspan="5" class="no-data">Veri yok</td></tr>';
+        if (container) container.innerHTML = '<p class="no-data">Veri yok</p>';
         return;
     }
 
+    // Desktop table view
     tbody.innerHTML = expenses.map(expense => `
         <tr>
             <td>${expense.transactionDate}</td>
@@ -136,6 +174,36 @@ function updateExpenseTable(expenses) {
             </td>
         </tr>
     `).join('');
+
+    // Mobile card view
+    if (container) {
+        container.innerHTML = expenses.map(expense => `
+            <div class="mobile-card">
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label">Tarih:</span>
+                    <span class="mobile-card-value">${expense.transactionDate}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label">Kategori:</span>
+                    <span class="mobile-card-value">${expense.categoryName || '-'}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label">Açıklama:</span>
+                    <span class="mobile-card-value">${expense.description || '-'}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-card-label">Tutar:</span>
+                    <span class="mobile-card-value" style="color: #f44336; font-weight: bold;">₺${expense.amount.toFixed(2)}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <div class="action-buttons" style="width: 100%;">
+                        <button class="btn-edit" onclick="editExpense(${expense.id}, ${expense.amount}, ${expense.categoryId || 'null'}, '${(expense.description || '').replace(/'/g, "\\'")}',' ${expense.transactionDate}')">Düzenle</button>
+                        <button class="btn-delete" onclick="deleteExpense(${expense.id})">Sil</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
 }
 
 // Modal functions
