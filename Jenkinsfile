@@ -4,19 +4,22 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/CengizOzdemir0/Gelir-gider.git'
+                // Jenkins Pipeline ayarlarında SCM kullandığımız için burası otomatik yapılır,
+                // ancak manuel kalacaksa şu yeterlidir:
+                checkout scm
             }
         }
 
         stage('Build & Deploy') {
             steps {
-                sh 'sudo docker-compose up -d --build gelir-gider-app'
+                // sudo kaldırıldı ve 'docker compose' (tire olmadan) deniyoruz
+                sh 'docker compose up -d --build gelir-gider-app'
             }
         }
 
         stage('Cleanup') {
             steps {
-                sh 'sudo docker image prune -f'
+                sh 'docker image prune -f'
             }
         }
     }
