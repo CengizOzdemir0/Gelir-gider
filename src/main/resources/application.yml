@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:postgresql://185.136.206.32:5432/gelir_gider_db
     username: gelir_user
-    password: 123456
+    password: gelir_sifre_123
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
