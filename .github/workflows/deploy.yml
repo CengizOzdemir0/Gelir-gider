@@ -38,4 +38,4 @@ jobs:
             cd ~/Gelir-gider
             git pull origin main
             docker compose pull
-            docker compose up -d --build
+            docker compose up --build -d
