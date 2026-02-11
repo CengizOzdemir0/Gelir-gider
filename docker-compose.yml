@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Veritabanı
+  db:
+    image: postgres:15
+    container_name: gelir_db
+    restart: always
+    environment:
+      POSTGRES_DB: gelir_gider_db
+      POSTGRES_USER: gelir_user
+      POSTGRES_PASSWORD: gelir_sifre_123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Redis Servisi
+  redis:
+    image: redis:7-alpine
+    container_name: gelir_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  # Java Uygulaman (Gelir-gider)
+  app:
+    build: .
+    container_name: gelir_gider_backend
+    restart: always
+    ports:
+      - "1818:1818"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/gelir_gider_db
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+
+
+  nginx:
+    image: nginx:alpine
+    container_name: gelir_nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+
+
+volumes:
+  postgres_data:
+
+
+
