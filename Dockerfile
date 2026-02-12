@@ -18,6 +18,9 @@ RUN apt-get update && apt-get install -y unzip && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
+# Copy custom Glowroot admin configuration
+COPY glowroot-admin.json /app/glowroot/admin.json
+
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 1818

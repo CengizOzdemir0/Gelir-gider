@@ -35,6 +35,7 @@ services:
     restart: always
     ports:
       - "1818:1818"
+      - "4000:4000"  # Glowroot UI
     depends_on:
       - db
       - redis
